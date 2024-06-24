@@ -101,6 +101,39 @@ export const valid = [
       readonly testSignal = viewChildren('test');
     }
     `,
+  `
+    import {Signal} from '@angular/core';
+      
+    declare function customSignalFactory(): Signal<number>;
+    
+    class Test {
+      testSignal = customSignalFactory();
+    }
+    `,
+  {
+    code: `
+      import {Signal} from '@angular/core';
+      
+      declare function customSignalFactory(): Signal<number>;
+      
+      class Test {
+        readonly testSignal = customSignalFactory();
+      }
+      `,
+    options: [{ typeAwareLinting: true }],
+  },
+  {
+    code: `
+      type Signal<T> = () => T;
+      
+      declare function customSignalFactory(): Signal<number>;
+      
+      class Test {
+        testSignal = customSignalFactory();
+      }
+      `,
+    options: [{ typeAwareLinting: true }],
+  },
 ];
 
 export const invalid = [
@@ -462,5 +495,35 @@ export const invalid = [
     `,
       },
     ],
+  }),
+  convertAnnotatedSourceToFailureCase({
+    description: 'should fail when a customSignalFactory is not readonly',
+    annotatedSource: `
+    import {Signal} from '@angular/core';
+      
+    declare function customSignalFactory(): Signal<number>;
+    
+    class Test {
+      testSignal = customSignalFactory();
+      ~~~~~~~~~~
+    }
+    `,
+    messageId,
+    suggestions: [
+      {
+        messageId: suggestAddReadonlyModifier,
+        output: `
+    import {Signal} from '@angular/core';
+      
+    declare function customSignalFactory(): Signal<number>;
+    
+    class Test {
+      readonly testSignal = customSignalFactory();
+      
+    }
+    `,
+      },
+    ],
+    options: [{ typeAwareLinting: true }],
   }),
 ];

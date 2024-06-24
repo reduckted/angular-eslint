@@ -1,8 +1,9 @@
-import { AST_NODE_TYPES } from '@typescript-eslint/utils';
 import type { TSESTree } from '@typescript-eslint/utils';
+import { AST_NODE_TYPES, ESLintUtils } from '@typescript-eslint/utils';
 import { createESLintRule } from '../utils/create-eslint-rule';
+import ts from 'typescript';
 
-type Options = [];
+type Options = [{ readonly typeAwareLinting: boolean }];
 export type MessageIds = 'preferSignalReadonly' | 'suggestAddReadonlyModifier';
 export const RULE_NAME = 'prefer-signal-readonly';
 const KNOWN_SIGNAL_TYPES: ReadonlySet<string> = new Set([
@@ -22,6 +23,7 @@ const KNOWN_SIGNAL_CREATION_FUNCTIONS: ReadonlySet<string> = new Set([
   'viewChild',
   'viewChildren',
 ]);
+const angularCoreIndex = '/node_modules/@angular/core/index.d.ts';
 
 export default createESLintRule<Options, MessageIds>({
   name: RULE_NAME,
@@ -32,19 +34,60 @@ export default createESLintRule<Options, MessageIds>({
         'Prefer to declare `Signal` properties as `readonly` since they are not supposed to be reassigned',
     },
     hasSuggestions: true,
-    schema: [],
+    schema: [
+      {
+        type: 'object',
+        properties: {
+          typeAwareLinting: {
+            type: 'boolean',
+          },
+        },
+        additionalProperties: false,
+      },
+    ],
     messages: {
       preferSignalReadonly:
         'Prefer to declare `Signal` properties as `readonly` since they are not supposed to be reassigned',
       suggestAddReadonlyModifier: 'Add `readonly` modifier',
     },
   },
-  defaultOptions: [],
-  create(context) {
+  defaultOptions: [
+    {
+      typeAwareLinting: false,
+    },
+  ],
+  create(context, [{ typeAwareLinting }]) {
+    const parser = typeAwareLinting
+      ? ESLintUtils.getParserServices(context)
+      : null;
+
     return {
       [`PropertyDefinition:not([readonly=true])`](
         node: TSESTree.PropertyDefinition,
       ) {
+        const type = parser?.getTypeAtLocation(node);
+
+        if (type?.aliasSymbol) {
+          const {
+            aliasSymbol: { name, declarations },
+          } = type;
+          const isDeclaredInAngularCore = declarations?.some(({ parent }) => {
+            if (!ts.isSourceFile(parent)) {
+              return false;
+            }
+
+            return parent.fileName.endsWith(angularCoreIndex);
+          });
+
+          if (
+            KNOWN_SIGNAL_TYPES.has(name) &&
+            isDeclaredInAngularCore &&
+            !node.readonly
+          ) {
+            report();
+          }
+        }
+
         if (node.typeAnnotation) {
           // Use the type annotation to determine
           // whether the property is a signal.

@@ -24,6 +24,18 @@ function isValidParser(
 export class RuleTester extends TSESLintRuleTester {
   private filename?: string = '';
 
+  static readonly withProject: typeof RuleTester = class extends RuleTester {
+    constructor(config: RuleTesterConfig) {
+      super({
+        ...config,
+        parserOptions: {
+          tsconfigRootDir: getFixturesRootDir(),
+          project: './tsconfig.json',
+        },
+      });
+    }
+  };
+
   // as of eslint 6 you have to provide an absolute path to the parser
   // but that's not as clean to type, this saves us trying to manually enforce
   // that contributors require.resolve everything
