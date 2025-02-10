@@ -361,6 +361,39 @@ class Test extends Component implements ng.OnInit, ng.OnDestroy  {
 class Test {}
 ```
 
+<br>
+
+---
+
+<br>
+
+#### Default Config
+
+```json
+{
+  "rules": {
+    "@angular-eslint/use-lifecycle-interface": [
+      "error"
+    ]
+  }
+}
+```
+
+<br>
+
+#### ✅ Valid Code
+
+```ts
+@Directive()
+class ComponentBase implements OnDestroy {
+   ngOnDestroy() {}
+}
+@Component()
+class TestComponent extends ComponentBase {
+  override ngOnDestroy() {}
+}
+```
+
 </details>
 
 <br>

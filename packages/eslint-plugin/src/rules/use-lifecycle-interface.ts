@@ -34,10 +34,12 @@ export default createESLintRule<Options, MessageIds>({
     return {
       [`MethodDefinition[key.name=${angularLifecycleMethodsPattern}]`]({
         key,
+        override,
         parent: { parent },
       }: TSESTree.MethodDefinition & { parent: TSESTree.ClassBody } & {
         parent: TSESTree.ClassDeclaration;
       }) {
+        if (override) return;
         if (!ASTUtils.getAngularClassDecorator(parent)) return;
 
         const declaredLifecycleInterfaces =

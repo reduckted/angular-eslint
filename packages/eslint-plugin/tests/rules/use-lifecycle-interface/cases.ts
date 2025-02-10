@@ -51,6 +51,14 @@ export const valid: readonly (string | ValidTestCase<Options>)[] = [
   `
     @Component()
     class Test {}`,
+  {
+    code: `
+    @Component()
+    class TestComponent extends ComponentBase {
+      override ngOnDestroy() {}
+    }
+    `,
+  },
 ];
 
 export const invalid: readonly InvalidTestCase<MessageIds, Options>[] = [
