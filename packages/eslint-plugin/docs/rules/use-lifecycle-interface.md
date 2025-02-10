@@ -229,6 +229,7 @@ class Test extends Component {
 #### ✅ Valid Code
 
 ```ts
+@Component()
 class Test implements OnInit {
   ngOnInit() {}
 }
@@ -257,9 +258,10 @@ class Test implements OnInit {
 #### ✅ Valid Code
 
 ```ts
+@Component()
 class Test implements DoBootstrap {
-      ngDoBootstrap() {}
-    }
+  ngDoBootstrap() {}
+}
 ```
 
 <br>
@@ -285,6 +287,7 @@ class Test implements DoBootstrap {
 #### ✅ Valid Code
 
 ```ts
+@Component()
 class Test extends Component implements OnInit, OnDestroy  {
   ngOnInit() {}
 
@@ -319,6 +322,7 @@ class Test extends Component implements OnInit, OnDestroy  {
 #### ✅ Valid Code
 
 ```ts
+@Component()
 class Test extends Component implements ng.OnInit, ng.OnDestroy  {
   ngOnInit() {}
 
@@ -353,6 +357,7 @@ class Test extends Component implements ng.OnInit, ng.OnDestroy  {
 #### ✅ Valid Code
 
 ```ts
+@Component()
 class Test {}
 ```
 

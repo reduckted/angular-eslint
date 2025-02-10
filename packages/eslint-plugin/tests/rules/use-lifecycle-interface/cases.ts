@@ -13,15 +13,19 @@ const messageId: MessageIds = 'useLifecycleInterface';
 
 export const valid: readonly (string | ValidTestCase<Options>)[] = [
   `
+    @Component()
     class Test implements OnInit {
       ngOnInit() {}
     }
     `,
-  `class Test implements DoBootstrap {
+  `
+    @Component()
+    class Test implements DoBootstrap {
       ngDoBootstrap() {}
     }
     `,
   `
+    @Component()
     class Test extends Component implements OnInit, OnDestroy  {
       ngOnInit() {}
 
@@ -33,6 +37,7 @@ export const valid: readonly (string | ValidTestCase<Options>)[] = [
     }
     `,
   `
+    @Component()
     class Test extends Component implements ng.OnInit, ng.OnDestroy  {
       ngOnInit() {}
 
@@ -43,7 +48,9 @@ export const valid: readonly (string | ValidTestCase<Options>)[] = [
       ngOnSmth() {}
     }
     `,
-  'class Test {}',
+  `
+    @Component()
+    class Test {}`,
 ];
 
 export const invalid: readonly InvalidTestCase<MessageIds, Options>[] = [
