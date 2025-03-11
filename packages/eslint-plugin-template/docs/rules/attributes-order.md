@@ -893,6 +893,37 @@ interface Options {
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ```
 
+<br>
+
+---
+
+<br>
+
+#### Custom Config
+
+```json
+{
+  "rules": {
+    "@angular-eslint/template/attributes-order": [
+      "error",
+      {
+        "alphabetical": true,
+        "order": []
+      }
+    ]
+  }
+}
+```
+
+<br>
+
+#### ❌ Invalid Code
+
+```html
+<div alpha="a" (gamma)="g()" beta="{{ b }}" [delta]="d"></div>
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
 </details>
 
 <br>
@@ -1452,6 +1483,36 @@ interface Options {
 
 ```html
 <div alpha="a" i18n-alpha="a18n" beta="b" i18n-beta="b18n" gamma="g" i18n-gamma="g18n"></div>
+```
+
+<br>
+
+---
+
+<br>
+
+#### Custom Config
+
+```json
+{
+  "rules": {
+    "@angular-eslint/template/attributes-order": [
+      "error",
+      {
+        "alphabetical": true,
+        "order": []
+      }
+    ]
+  }
+}
+```
+
+<br>
+
+#### ✅ Valid Code
+
+```html
+<div alpha="a" beta="{{ b }}" (gamma)="g()" [delta]="d"></div>
 ```
 
 </details>
