@@ -49,6 +49,9 @@ import noDistractingElements, {
 import noDuplicateAttributes, {
   RULE_NAME as noDuplicateAttributesRuleName,
 } from './rules/no-duplicate-attributes';
+import noEmptyControlFlow, {
+  RULE_NAME as noEmptyControlFlowRuleName,
+} from './rules/no-empty-control-flow';
 import noInlineStyles, {
   RULE_NAME as noInlineStylesRuleName,
 } from './rules/no-inline-styles';
@@ -114,6 +117,7 @@ export = {
     [noCallExpressionRuleName]: noCallExpression,
     [noDistractingElementsRuleName]: noDistractingElements,
     [noDuplicateAttributesRuleName]: noDuplicateAttributes,
+    [noEmptyControlFlowRuleName]: noEmptyControlFlow,
     [noInlineStylesRuleName]: noInlineStyles,
     [noInterpolationInAttributesRuleName]: noInterpolationInAttributes,
     [noNegatedAsyncRuleName]: noNegatedAsync,
